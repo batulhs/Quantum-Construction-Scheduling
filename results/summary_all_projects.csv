@@ -1,0 +1,4 @@
+Project,Activities,Availability,Top bottleneck,Initial plan (days),Hybrid (days),Reduction (%),Avg utilisation (%),Sub-QUBOs,Max qubits,Violations,Runtime (s)
+C2025-05 Education Service,58,recorded,painter,76,54,28.9,28.8,164,98,0,10.9
+C2025-06 Primary School,52,RS=0.5,plumber,80,80,0.0,38.5,145,97,0,8.7
+C2012-02 Nut Mixing Station,58,RS=0.2,aerial platform,27,27,0.0,20.4,55,100,0,7.4

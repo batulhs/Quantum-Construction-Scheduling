@@ -1,0 +1,4 @@
+,valid samples (%),optimal samples (%)
+Random guessing,0.073,0.0183
+QAOA laptop simulator,2.595,0.68
+QAOA fake_kingston,1.5,0.0

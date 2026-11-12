@@ -1,0 +1,4 @@
+Method,Makespan (days),Runtime (s),Avg utilisation (%),Busiest resource util. (%),Violations,Feasible,Qubits,Feasible shots (%),Optimal shots (%)
+"Exhaustive check, all 2^16 bitstrings",4,0.654,100.0,100.0,0,Yes,,,
+Quantum annealing (simulated),4,0.088,100.0,100.0,0,Yes,,,
+QAOA p=1 (CPU simulator),4,9.07,100.0,100.0,0,Yes,16,2.595,0.6800

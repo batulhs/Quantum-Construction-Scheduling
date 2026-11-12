@@ -1,0 +1,7 @@
+Project,Decomposition,Makespan (days),Sub-QUBOs solved,Mean qubits/sub-QUBO,Max qubits/sub-QUBO,Runtime (s)
+C2025-05 Education Service,fixed window,54,50,44,91,3.7
+C2025-05 Education Service,adaptive,54,164,44,98,10.9
+C2025-06 Primary School,fixed window,80,18,36,106,1.0
+C2025-06 Primary School,adaptive,80,145,34,97,8.7
+C2012-02 Nut Mixing Station,fixed window,27,17,116,182,3.5
+C2012-02 Nut Mixing Station,adaptive,27,55,83,100,7.4

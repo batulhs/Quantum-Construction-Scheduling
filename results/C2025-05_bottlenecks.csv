@@ -1,0 +1,7 @@
+Rank,Resource,Capacity,Utilisation (%),Peak demand (no limits),Conflict days,Isolated delay (days),Removal gain (days),Impact (days)
+1,painter,3,65.4,7,14,29,29,29
+2,steel worker,6,24.6,5,0,0,0,0
+3,plumber,7,15.8,3,0,0,0,0
+4,carpenter,8,11.5,4,0,0,0,0
+5,team subcontractor,12,5.0,3,0,0,0,0
+6,mason,16,0.7,2,0,0,0,0

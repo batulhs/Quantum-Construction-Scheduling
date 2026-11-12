@@ -1,0 +1,59 @@
+id,name,phase,start_day,finish_day
+0,Nut Mixing Station,,0,23
+14,Montage,,0,21
+15,Montage (kraan binnen bij as 4),,0,3
+18,Vloeren,,0,15
+30,Dak,,0,8
+31,Plaatsen opstanden voor koepels,,0,2
+35,Staalstructuur,,0,12
+41,Technische voorzieningen,,0,6
+45,Plaatsing wegneembare wand,,0,1
+47,Afwerking,,0,6
+5,Constructie gebouw,,0,23
+50,Nut mixing station,,0,8
+6,Herassen + vergaderkeet,,0,1
+7,Grondwerk,,0,13
+8,Uitgraven + concassé  + dichten gracht,,0,3
+29,Verwijderen rijplaten,,2,3
+32,Dakwerken (onderlaag),,2,4
+16,Montage (kraan binnen bij as 1),,3,7
+36,Plaatsen railing rond verdiep,,3,4
+9,Palen,,3,5
+33,Dakwerken (afwerking),,4,7
+19,Druklaag (klaarleggen + gieten),,5,7
+20,Ondervloer goot gieten,,7,8
+22,Nivelleren binnen,,7,8
+34,Levenslijn,,7,8
+37,Plaatsen RACK,,7,9
+48,Inrichting verstiaire,,7,10
+23,Wapening,,8,9
+24,Vloeren binnen en buiten,,9,10
+10,Delven paalkoppen + sleuven + riolering + zuivering,,10,12
+17,Montage (kraan buiten),,10,13
+11,Staking,,12,13
+13,aansluiten in bestaande put,,12,14
+26,Metsen muur,,12,15
+21,Borduren zetten,,13,14
+25,Plintjes boven,,13,14
+38,Plaatsen kolommen en liggers,,13,15
+27,Plaatsen rijplaten,,14,15
+59,Boren van openingen,,14,15
+39,Plaatsen zwenkarm,,15,16
+42,Elektriciteit + verlichting,,15,20
+51,Plaatsen tanks,,15,16
+12,Paalkoppen ALHB,,16,21
+28,Plintjes zetten beneden,,16,18
+52,Plaatsen leidingen,,16,19
+43,Leidingen,,19,21
+46,Plaatsen isolatiepanelen,,19,20
+55,Plaatsen pompen,,19,21
+40,"Montage wandelbrug, poort, trap",,20,22
+61,Brandbeveiliging en sensoren,,20,23
+49,Epoxy deklaag,,21,24
+54,Plaatsten filter,,21,22
+53,Weegsysteem,,22,23
+57,Verwarming,,22,25
+60,Automatisering,,22,27
+44,Perslucht,,23,25
+56,Pigged pipe,,25,27
+58,Pièce magnétique,,25,27
