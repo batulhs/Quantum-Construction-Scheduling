@@ -1,0 +1,28 @@
+# "Blueprint & Safety Amber" -- viewers switch with  ⋮ → Settings → Theme  (Light / Dark / System)
+[theme]
+font = "sans serif"
+
+[theme.light]
+primaryColor = "#0B7A75"
+backgroundColor = "#F7F5F0"
+secondaryBackgroundColor = "#ECE8DF"
+textColor = "#1D2B2F"
+
+[theme.light.sidebar]
+backgroundColor = "#EFECE4"
+
+[theme.dark]
+primaryColor = "#36C2B4"
+backgroundColor = "#0E1719"
+secondaryBackgroundColor = "#172529"
+textColor = "#E6EEEB"
+
+[theme.dark.sidebar]
+backgroundColor = "#121F22"
+
+[server]
+headless = true
+maxUploadSize = 50
+
+[browser]
+gatherUsageStats = false
