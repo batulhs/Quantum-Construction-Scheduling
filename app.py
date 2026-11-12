@@ -64,9 +64,32 @@ st.markdown(f"""
 .step b {{ color: {PRIMARY}; }}
 .step.q {{ border-top-color: {ACCENT}; background: {ACCENT}1F; }}
 .step.q b {{ color: {ACCENT}; }}
-.note {{ color: {MUTED}; font-size: .88rem; }}
+.note {{ color: inherit; opacity: .85; font-size: .88rem; }}
+/* captions and small print: darker than Streamlit's default grey */
+[data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] p {{ color: inherit !important; opacity: .85; }}
+hr {{ border-color: color-mix(in srgb, currentColor 45%, transparent) !important; }}
 div[data-testid="stMetric"] {{ background: {CARD}; border: 1px solid {EDGE}; border-left: 4px solid {PRIMARY};
         border-radius: 12px; padding: 10px 14px; }}
+/* tables written in markdown (Method tab): clearly visible lines in light and dark mode */
+[data-testid="stMarkdownContainer"] table {{ border-collapse: collapse; width: 100%; }}
+[data-testid="stMarkdownContainer"] th, [data-testid="stMarkdownContainer"] td {{
+        border: 1.5px solid color-mix(in srgb, currentColor 60%, transparent) !important; padding: 8px 10px; }}
+[data-testid="stMarkdownContainer"] th {{ background: {PRIMARY}26; }}
+/* phones and narrow windows */
+@media (max-width: 640px) {{
+  .block-container {{ padding: 1rem 0.7rem 2rem; }}
+  .hero {{ padding: 18px 16px 26px; border-radius: 14px; }}
+  .hero h1 {{ font-size: 1.35rem; line-height: 1.25; }}
+  .hero p {{ font-size: .88rem; }}
+  .pill {{ display: none; }}
+  .modebar-container {{ display: none !important; }}
+  .step {{ margin-bottom: 8px; }}
+  div[data-testid="stMetricValue"] {{ font-size: 1.45rem; }}
+  [data-testid="stMarkdownContainer"] table {{ font-size: .82rem; }}
+  [data-testid="stMarkdownContainer"] th, [data-testid="stMarkdownContainer"] td {{ padding: 6px 7px; }}
+  .katex-display {{ overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }}
+  button[data-baseweb="tab"] {{ font-size: .85rem; }}
+}}
 </style>""", unsafe_allow_html=True)
 
 
@@ -123,6 +146,11 @@ def summary_table():
     return pd.read_csv(f) if os.path.exists(f) else None
 
 
+@st.cache_data(show_spinner=False)
+def qaoa_cached(code, caps, size):
+    return run_qaoa(DATA, code, caps, size)
+
+
 # --------------------------------------------------------------------------- chart helpers
 def gantt(p: Project, sched: dict, title: str, height_per_row=19):
     ids = sorted(sched, key=lambda a: (sched[a], a))
@@ -135,7 +163,7 @@ def gantt(p: Project, sched: dict, title: str, height_per_row=19):
             continue
         acts = [p.activities[a] for a in rows]
         fig.add_bar(
-            y=[f"{a.id} · {a.name[:38]}" for a in acts], x=[max(a.duration, 0.2) for a in acts],
+            y=[f"{a.id} · {a.name[:26]}" for a in acts], x=[max(a.duration, 0.2) for a in acts],
             base=[sched[a.id] for a in acts], orientation="h", name=ph[:30], marker_color=colour[ph],
             customdata=[[a.name, sched[a.id], sched[a.id] + a.duration, ", ".join(f"{en(r)}×{u}" for r, u in a.demand.items()) or "–"]
                         for a in acts],
@@ -143,10 +171,11 @@ def gantt(p: Project, sched: dict, title: str, height_per_row=19):
     C = makespan(p, sched)
     fig.add_vline(x=C, line_dash="dash", line_color=DELAY, annotation_text=f"finish: day {C}",
                   annotation_position="top")
-    order = [f"{a} · {p.activities[a].name[:38]}" for a in ids]
+    order = [f"{a} · {p.activities[a].name[:26]}" for a in ids]
     fig.update_yaxes(categoryorder="array", categoryarray=order[::-1], tickfont_size=10)
     fig.update_layout(title=title, barmode="overlay", height=max(320, height_per_row * len(ids) + 120),
-                      xaxis_title="Working day", legend_title="Phase", margin=dict(l=10, r=10, t=50, b=10))
+                      xaxis_title="Working day", legend_title="Phase", margin=dict(l=10, r=10, t=50, b=10),
+                      legend=dict(orientation="h", yanchor="top", y=-0.06, xanchor="left", x=0, font_size=10))
     return fig
 
 
@@ -362,9 +391,9 @@ with tabs[3]:
 # --------------------------------------------------------------------------- Quantum core
 with tabs[4]:
     st.subheader("The quantum core: the worst conflict, solved whole")
-    size = st.radio("Core size", ["laptop", "gpu"], horizontal=True,
-                    format_func=lambda s: "16 qubits (laptop)" if s == "laptop" else "26 qubits (GPU)",
-                    index=0 if aer_device() == "CPU" else 1)
+    size = (st.radio("Core size", ["laptop", "gpu"], horizontal=True,  # 26-qubit option only appears on a GPU
+                     format_func=lambda s: "16 qubits (laptop)" if s == "laptop" else "26 qubits (GPU)")
+            if aer_device() == "GPU" else "laptop")
     try:
         with st.spinner("Extracting the top conflict core..."):
             sp, q, info, opt = quantum_core(code, caps, size)
@@ -401,9 +430,9 @@ with tabs[4]:
         samp, _, ss = anneal(q, num_reads=300)
         sch, _ = q.decode(samp); sch.pop(END, None)
         st.session_state["sa"] = (code, caps, size, sch, time.perf_counter() - t)
-    if b2.button("⚛️ Solve with QAOA (≈ 10-30 s)", type="primary"):
+    if b2.button("⚛️ Solve with QAOA (first run ≈ 1-3 min on the free server)", type="primary"):
         with st.spinner(f"Tuning the QAOA circuit on the {aer_device()} simulator, then sampling 20,000 shots..."):
-            out = run_qaoa(DATA, code, caps, size)  # separate process (see src/ui_jobs.py)
+            out = qaoa_cached(code, caps, size)  # separate process (see src/ui_jobs.py), cached
         st.session_state["qa"] = (code, caps, size, out["schedule"], out["stats"], out["random"], out["runtime_s"])
 
     sa = st.session_state.get("sa")
@@ -451,7 +480,7 @@ with tabs[5]:
 | **1 · Bottleneck ranking** | For every resource: isolated delay (only it limited) and removal gain (it unlimited) → impact in days, ranked |
 | **2 · Adaptive decomposition** | Sub-problems sized to each conflict; waiting jobs get more freedom; every sub-QUBO is shrunk to fit the qubit budget |
 | **3 · Multi-resource conflicts** | Conflict graph labelled with every contested resource; multi-resource jobs; conflict cores feed the quantum core |
-| **Quantum solvers** | Simulated quantum annealing (dwave-samplers) and QAOA (Qiskit, CPU/GPU simulator, or IBM hardware via `run_ibm.py`) |
+| **Quantum solvers** | Simulated quantum annealing (dwave-samplers) and QAOA (Qiskit Aer simulator, or IBM hardware via `run_ibm.py`) |
 """)
     st.markdown("**Data.** DSLIB v3.4 (Batselier & Vanhoucke, 2015, *Int. J. Project Management* 33(3)), "
                 "Ghent University. Education Service is used exactly as recorded; the other two use availability "
